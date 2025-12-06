@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Animais em Extinção — uma landing page divertida e informativa sobre espécies marinhas em risco e como ajudar." />
+  <title>Animais em Extinção — Proteja as Espécies Marinhas</title>
+
+  <style>
+    /* =======================
+       Paleta e variáveis
+       ======================= */
+    :root{
+      --bg-deep: #001f3f;          /* azul profundo */
+      --ocean: #005f80;           /* azul oceano */
+      --teal: #00b3c6;            /* ciano forte */
+      --coral: #ff6b6b;           /* coral / aviso */
+      --sand: #ffe7c4;            /* tom areia para contraste */
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.06);
+      --text: #e6f7ff;
+      --muted: rgba(230,247,255,0.8);
+      --shadow: 0 18px 40px rgba(0,0,0,0.45);
+      --glass-2: rgba(255,255,255,0.04);
+      --focus: 3px solid rgba(0,179,198,0.18);
+      font-synthesis: none;
+    }
+    .light{
+      --bg-deep: #e6faff;
+      --ocean: #0077a3;
+      --teal: #007f99;
+      --coral: #ff4d4d;
+      --sand: #fff6e8;
+      --card: rgba(5,64,80,0.03);
+      --glass: rgba(255,255,255,0.6);
+      --text: #002b34;
+      --muted: rgba(0,43,51,0.76);
+      --shadow: 0 16px 36px rgba(2,40,50,0.08);
+      --glass-2: rgba(255,255,255,0.85);
+      --focus: 3px solid rgba(0,119,163,0.12);
+    }
+
+    /* =======================
+       Reset e base
+       ======================= */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(0,179,198,0.06), transparent 10%),
+        linear-gradient(180deg, var(--bg-deep) 0%, #002b46 60%, #001824 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background 400ms ease, color 300ms ease;
+      overflow-y:auto;
+    }
+    a{color:var(--teal); text-decoration:none}
+    a:focus{outline:var(--focus); border-radius:6px}
+
+    /* =======================
+       Header / Nav
+       ======================= */
+    header{position:sticky; top:0; z-index:80; padding:0.65rem; backdrop-filter: blur(8px);}
+    .container{max-width:1100px; margin:0 auto; padding:0 1.25rem;}
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:1rem;}
+    .brand{display:flex; align-items:center; gap:0.9rem; font-weight:800}
+    .logo{
+      width:48px; height:48px; border-radius:10px; display:grid; place-items:center; font-size:1.15rem;
+      background:linear-gradient(135deg,var(--teal),var(--ocean)); color:white; box-shadow:var(--shadow);
+    }
+    nav ul{display:flex; gap:0.6rem; margin:0; padding:0; list-style:none}
+    nav a{padding:0.45rem 0.7rem; border-radius:8px; font-weight:700; color:var(--muted)}
+    nav a:hover, nav a:focus{background:var(--glass-2); transform:translateY(-3px); transition:transform 180ms}
+    .controls{display:flex; gap:0.6rem; align-items:center}
+
+    /* =======================
+       Hero
+       ======================= */
+    main{padding:1.5rem 0 4rem;}
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr 460px;
+      gap:1rem;
+      align-items:center;
+      margin-top:0.6rem;
+    }
+    .card-hero{
+      padding:1.25rem; border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+      box-shadow: var(--shadow); position:relative; overflow:hidden;
+    }
+    .hero h1{margin:0; font-size:2.1rem; letter-spacing:-0.5px}
+    .hero .slogan{color:var(--sand); font-weight:700; margin-top:0.2rem; font-size:1.05rem}
+    .hero p{opacity:0.95; margin-top:0.8rem; line-height:1.5}
+
+    .btn{
+      display:inline-flex; align-items:center; gap:0.6rem; padding:0.7rem 1rem; border-radius:12px; border:0; cursor:pointer;
+      font-weight:800; letter-spacing:0.2px; box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .btn.primary{background: linear-gradient(90deg,var(--teal),var(--ocean)); color:white;}
+    .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,0.07); color:var(--text); font-weight:700}
+
+    .btn:active{transform:translateY(1px)}
+    .btn:focus{outline:var(--focus)}
+    .hero-actions{margin-top:1rem; display:flex; gap:0.6rem; flex-wrap:wrap}
+
+    /* Hero image card */
+    .hero-visual{
+      height:420px; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); position:relative;
+      transform-origin:center;
+    }
+    .hero-visual img{width:100%; height:100%; object-fit:cover; display:block; transition: transform 800ms cubic-bezier(.2,.9,.2,1); }
+    .hero-visual:hover img{transform:scale(1.03) rotate(-0.6deg)}
+    /* decorative animated bubbles */
+    .bubble{
+      position:absolute; border-radius:50%; background:rgba(255,255,255,0.03); pointer-events:none;
+      box-shadow: inset 0 -6px 18px rgba(0,0,0,0.08);
+      animation: drift 12s linear infinite;
+    }
+    .bubble.b1{width:160px; height:160px; left:-40px; top:10px; animation-duration:14s;}
+    .bubble.b2{width:100px; height:100px; right:-30px; top:60px; animation-duration:18s;}
+    .bubble.b3{width:60px; height:60px; left:20%; bottom:10px; animation-duration:10s; opacity:0.9}
+    @keyframes drift{
+      0%{transform:translateY(0) translateX(0) scale(1)}
+      50%{transform:translateY(-18px) translateX(6px) scale(1.03)}
+      100%{transform:translateY(0) translateX(0) scale(1)}
+    }
+
+    /* =======================
+       Curiosidades
+       ======================= */
+    section h2{margin-top:1.2rem; margin-bottom:0.2rem; font-size:1.25rem}
+    .curiosidades{display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.6rem}
+    .curio{
+      flex:1 1 220px; display:flex; gap:0.8rem; padding:0.9rem; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+      box-shadow: 0 14px 30px rgba(0,0,0,0.25); align-items:flex-start; transition:transform 260ms;
+    }
+    .curio:hover{transform:translateY(-6px)}
+    .badge{width:44px; height:44px; border-radius:10px; display:grid; place-items:center; font-weight:900; font-size:1rem;
+      color:white; background:linear-gradient(135deg,var(--ocean),var(--teal)); flex:0 0 44px;}
+    .curio h4{margin:0; font-size:1rem}
+    .curio p{margin:0.35rem 0 0 0; font-size:0.92rem; opacity:0.95}
+
+    /* =======================
+       Fatos cards
+       ======================= */
+    .cards{display:grid; grid-template-columns: repeat(3,1fr); gap:0.75rem; margin-top:0.9rem}
+    .fact{
+      padding:0.9rem; border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+      box-shadow:var(--shadow); min-height:140px; transition: transform 200ms ease;
+    }
+    .fact:hover{transform:translateY(-8px)}
+    .fact h3{margin:0; font-size:1.02rem}
+    .fact p{margin-top:0.6rem; font-size:0.95rem; opacity:0.96}
+
+    /* =======================
+       Galeria
+       ======================= */
+    .gallery{display:grid; grid-template-columns: repeat(4,1fr); gap:0.6rem; margin-top:0.9rem}
+    figure{margin:0; border-radius:10px; overflow:hidden; position:relative; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02)); box-shadow:var(--shadow)}
+    figure img{width:100%; height:160px; object-fit:cover; display:block; transition: transform 360ms cubic-bezier(.2,.9,.2,1)}
+    figure:hover img{transform:scale(1.06)}
+    figcaption{padding:0.55rem; font-weight:700; font-size:0.9rem; color:var(--muted)}
+
+    /* =======================
+       FAQ
+       ======================= */
+    .faq{margin-top:0.6rem}
+    details{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03)); padding:0.8rem; border-radius:10px; margin-bottom:0.5rem; box-shadow:var(--shadow)}
+    summary{cursor:pointer; font-weight:800; outline:none}
+    details[open] p{margin-top:0.45rem}
+
+    /* =======================
+       Final CTA + footer
+       ======================= */
+    .final-cta{display:flex; gap:1rem; align-items:center; justify-content:space-between; padding:1rem; border-radius:12px; margin-top:1rem;
+      background:linear-gradient(90deg, rgba(0,179,198,0.06), rgba(255,107,107,0.04)); box-shadow: 0 18px 40px rgba(0,0,0,0.2)}
+    footer{margin-top:1.25rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.03); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap}
+    .credits{font-size:0.92rem; opacity:0.95}
+
+    /* =======================
+       Chat panel
+       ======================= */
+    aside.chat-panel{
+      position:fixed; right:1.25rem; bottom:1.25rem; width:340px; max-width:92%; height:460px; border-radius:12px; overflow:hidden;
+      transform:translateY(18px) scale(.98); opacity:0; transition: transform 300ms cubic-bezier(.2,.9,.2,1), opacity 240ms;
+      z-index:120; box-shadow: 0 30px 70px rgba(0,0,0,0.5); background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05));
+    }
+    aside.chat-panel.open{transform:none; opacity:1}
+    .chat-header{display:flex; justify-content:space-between; align-items:center; padding:0.75rem; border-bottom:1px solid rgba(255,255,255,0.03)}
+    .chat-body{padding:0.8rem; height:340px; overflow:auto; display:flex; flex-direction:column; gap:0.6rem}
+    .msg{padding:0.5rem 0.7rem; border-radius:10px; max-width:84%; background:rgba(255,255,255,0.03)}
+    .msg.user{align-self:flex-end; background:linear-gradient(90deg,var(--ocean),var(--teal)); color:white}
+
+    .chat-input{display:flex; gap:0.5rem; padding:0.6rem; border-top:1px solid rgba(255,255,255,0.02)}
+    .chat-input input{flex:1; padding:0.55rem; border-radius:10px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:var(--text)}
+    .chat-input button{padding:0.55rem 0.8rem; border-radius:10px; border:0; background:var(--coral); color:white; font-weight:700}
+
+    /* =======================
+       Responsividade
+       ======================= */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr; grid-auto-rows:auto}
+      .gallery{grid-template-columns:repeat(3,1fr)}
+      .cards{grid-template-columns:repeat(2,1fr)}
+      .hero-visual{height:340px}
+    }
+    @media (max-width:640px){
+      nav ul{display:none}
+      .cards{grid-template-columns:1fr}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .hero-visual{height:220px}
+    }
+
+    /* small fade-in */
+    .fade{opacity:0; transform:translateY(8px); transition:opacity 480ms ease, transform 480ms ease}
+    .fade.in{opacity:1; transform:none}
+  </style>
+
+    <!-- Bibliotecas -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body class="">
+  <header aria-label="Cabeçalho do site">
+    <div class="container nav">
+      <div class="brand" id="brand">
+        <div class="logo" aria-hidden="true">🐳</div>
+        <div>
+          <div style="font-size:0.95rem">Animais em Extinção</div>
+          <div style="font-size:0.78rem; opacity:0.9">Proteja espécies — o oceano chama!</div>
+        </div>
+      </div>
+
+      <nav aria-label="Navegação principal">
+        <ul>
+          <li><a href="#curiosidades">Curiosidades</a></li>
+          <li><a href="#fatos">Fatos</a></li>
+          <li><a href="#galeria">Galeria</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="controls">
+        <button id="themeToggle" class="btn ghost" aria-pressed="false" aria-label="Alternar modo">Modo</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="container" role="main">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <article class="card-hero fade in" aria-describedby="hero-desc">
+        <h1 id="hero-title">Animais em Extinção</h1>
+        <div class="slogan" id="hero-slogan">"O Oceano Precisa de Heróis" — Junte-se à onda de proteção!</div>
+        <p id="hero-desc">
+          Explore espécies marinhas em risco, descubra curiosidades impressionantes e saiba como suas atitudes podem mudar o destino de tartarugas, baleias, corais e muitas outras vidas.
+        </p>
+
+        <div class="hero-actions" role="group" aria-label="Ações principais">
+          <button id="abrirIA" class="btn primary" aria-label="Iniciar reconhecimento facial">Reconhecimento Facial</button>
+          <button id="btnAbrirChatbot" class="btn ghost" aria-label="Abrir chatbot" aria-controls="chatPanel">Abrir Chatbot</button>
+          <a class="btn" href="#galeria" role="link" aria-label="Ir para galeria" style="background:linear-gradient(90deg,var(--coral),#ff8f70); color:white;">Ver Galeria</a>
+        </div>
+
+        <p style="margin-top:0.9rem; font-size:0.9rem; color:var(--muted)">
+          Divertido, visual e informativo — feito para estudantes e amantes do mar. Role para descobrir curiosidades surpreendentes!
+        </p>
+      </article>
+
+      <aside class="hero-visual" aria-label="Imagem principal do projeto">
+        <img src="hero.png" alt="Vista subaquática com corais e peixes, representando espécies marinhas em risco." />
+        <div class="bubble b1" aria-hidden="true"></div>
+        <div class="bubble b2" aria-hidden="true"></div>
+        <div class="bubble b3" aria-hidden="true"></div>
+      </aside>
+    </section>
+
+    <!-- CURIOSIDADES -->
+    <section id="curiosidades" aria-labelledby="curiosidades-title">
+      <h2 id="curiosidades-title">Curiosidades do Fundo do Mar</h2>
+      <p style="margin-top:0.2rem; margin-bottom:0.6rem; color:var(--muted)">Fatos divertidos e chocantes sobre espécies que precisam da nossa ajuda.</p>
+
+      <div class="curiosidades" role="list">
+        <div class="curio" role="listitem" tabindex="0">
+          <div class="badge">🐢</div>
+          <div>
+            <h4>Tartarugas</h4>
+            <p>Algumas tartarugas marinhas viajam milhares de quilômetros para botar ovos na mesma praia onde nasceram — se ela for destruída, perdem seu lar.</p>
+          </div>
+        </div>
+
+        <div class="curio" role="listitem" tabindex="0">
+          <div class="badge">🐋</div>
+          <div>
+            <h4>Baleia-franca</h4>
+            <p>Caçadas históricas e colisões com navios reduziram populações; hoje a recuperação é lenta e vulnerável a ruído oceânico.</p>
+          </div>
+        </div>
+
+        <div class="curio" role="listitem" tabindex="0">
+          <div class="badge">🐚</div>
+          <div>
+            <h4>Recifes de Coral</h4>
+            <p>Recifes são berçários marinhos. O branqueamento por aquecimento global tem destruído muitos recifes em décadas recentes.</p>
+          </div>
+        </div>
+
+        <div class="curio" role="listitem" tabindex="0">
+          <div class="badge">🦑</div>
+          <div>
+            <h4>Pequenas espécies, grande papel</h4>
+            <p>Peixes menores e invertebrados mantêm cadeias alimentares — sua perda desequilibra ecossistemas inteiros.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FATOS / CIÊNCIA -->
+    <section id="fatos" aria-labelledby="fatos-title">
+      <h2 id="fatos-title">Fatos & Ciência</h2>
+      <p style="margin-top:0.2rem; margin-bottom:0.6rem; color:var(--muted)">Entenda as causas, os impactos e o que a ciência recomenda.</p>
+
+      <div class="cards" role="list">
+        <article class="fact" role="listitem" tabindex="0" aria-labelledby="ft1">
+          <h3 id="ft1">Causas Principais</h3>
+          <p>Perda de habitat, pesca excessiva, poluição (incluindo plástico e derramamentos), mudanças climáticas e tráfego marítimo são as maiores ameaças às espécies marinhas.</p>
+        </article>
+
+        <article class="fact" role="listitem" tabindex="0" aria-labelledby="ft2">
+          <h3 id="ft2">Consequências Ecológicas</h3>
+          <p>A redução de espécies altera cadeias alimentares, reduz serviços ecossistêmicos (como pesca sustentável) e pode provocar colapsos locais de biodiversidade.</p>
+        </article>
+
+        <article class="fact" role="listitem" tabindex="0" aria-labelledby="ft3">
+          <h3 id="ft3">Como Você Pode Ajudar</h3>
+          <p>Reduzir plástico, apoiar áreas marinhas protegidas, consumir frutos do mar certificados e participar de limpezas costeiras são ações práticas e efetivas.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- GALERIA -->
+    <section id="galeria" aria-labelledby="galeria-title">
+      <h2 id="galeria-title">Galeria — Espécies e Histórias</h2>
+      <p style="margin-top:0.2rem; margin-bottom:0.6rem; color:var(--muted)">Clique nas imagens para abrir em nova aba. Imagens ilustrativas.</p>
+
+      <div class="gallery" role="list">
+        <figure tabindex="0" role="listitem">
+          <img src="tartaruga.png" alt="Tartaruga marinha nadando perto da superfície" loading="lazy" />
+          <figcaption>Tartaruga marinha — risco por redes e poluição</figcaption>
+        </figure>
+
+        <figure tabindex="0" role="listitem">
+          <img src="baleia.png" alt="Grande baleia nadando" loading="lazy" />
+          <figcaption>Baleia — impacto de colisões e ruído</figcaption>
+        </figure>
+
+        <figure tabindex="0" role="listitem">
+          <img src="peixes.png" alt="Recife de coral colorido" loading="lazy" />
+          <figcaption>Recifes — berçários ameaçados</figcaption>
+        </figure>
+
+        <figure tabindex="0" role="listitem">
+          <img src="rededepesca.png" alt="Peixe colorido em coral" loading="lazy" />
+          <figcaption>Peixes recifais — pequenos, essenciais</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" aria-labelledby="faq-title" class="faq">
+      <h2 id="faq-title">Perguntas Frequentes</h2>
+
+      <details>
+        <summary>Por que muitas espécies marinhas estão em extinção?</summary>
+        <p>Principalmente por atividade humana: destruição de habitat, pesca predatória, poluição e aquecimento global que altera as condições do oceano.</p>
+      </details>
+
+      <details>
+        <summary>O que significa "recuperação de população"?</summary>
+        <p>É o aumento consistente no número de indivíduos de uma espécie após medidas de proteção (ex.: reservas marinhas, limites de pesca), mas pode levar décadas.</p>
+      </details>
+
+      <details>
+        <summary>Como posso saber se um peixe é sustentável para consumo?</summary>
+        <p>Procure certificações (MSC, ASC) e orientações locais sobre estoques; prefira espécies não ameaçadas e práticas de pesca responsáveis.</p>
+      </details>
+
+      <details>
+        <summary>As ações individuais fazem diferença?</summary>
+        <p>Sim — mudanças em consumo, redução de plástico e apoio a políticas públicas somam-se e geram impacto quando muitas pessoas agem.</p>
+      </details>
+    </section>
+
+    <!-- CALL TO ACTION FINAL -->
+    <section class="final-cta" aria-label="Chamada para ação final">
+      <p>Pronto para agir? <a href="#fatos">Aprenda mais</a> • <a href="#galeria">Explore a galeria</a></p>
+      <div style="display:flex; gap:0.5rem;">
+        <a class="btn" href="#top">Voltar ao topo</a>
+        <a class="btn ghost" href="#faq">Recursos & Dicas</a>
+      </div>
+    </section>
+
+    <!-- Créditos / Fontes -->
+    <footer role="contentinfo" aria-label="Rodapé">
+      <div class="container" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <div class="credits">
+          <strong>Créditos / Fontes:</strong>
+          <div style="margin-top:0.4rem;">
+            IUCN Red List • WWF • National Geographic • NOAA — materiais e imagens ilustrativas. <!-- TODO: substituir por links específicos se desejar -->
+          </div>
+        </div>
+
+        <div style="display:flex; gap:0.6rem; align-items:center;">
+          <a class="btn ghost" href="#top" aria-label="Voltar ao topo">↑ Topo</a>
+          <div id="yearNotice" style="font-size:0.95rem; opacity:0.95;">© <span id="year"></span> Projeto Educativo</div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+<!-- Chatbot -->
+
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+<df-messenger
+  intent="WELCOME"
+  chat-title="ECOBOT"
+  agent-id="6c106d6c-eef7-41db-92b4-5bf82848937e"
+  language-code="pt-br">
+</df-messenger>
+
+
+  <script>
+    // ============================
+    // Inicialização visual e acessibilidade
+    // ============================
+    (function(){
+      // small load animation
+      document.querySelectorAll('.fade').forEach(el => setTimeout(()=>el.classList.add('in'), 120));
+    })();
+
+    // ============================
+    // Theme toggle (light/dark)
+    // ============================
+    (function(){
+      const body = document.body;
+      const toggle = document.getElementById('themeToggle');
+      const key = 'marine-theme-light';
+      function apply(light){
+        if(light) body.classList.add('light'); else body.classList.remove('light');
+        toggle.setAttribute('aria-pressed', String(!!light));
+        toggle.textContent = light ? 'Claro' : 'Escuro';
+      }
+      const stored = localStorage.getItem(key);
+      const prefersLight = stored === null ? false : (stored === 'true');
+      apply(prefersLight);
+      toggle.addEventListener('click', function(){
+        const isLight = !body.classList.contains('light');
+        apply(isLight);
+        localStorage.setItem(key, String(isLight));
+      });
+    })();
+
+    // ============================
+    // Ano atual no rodapé
+    // ============================
+    (function(){ document.getElementById('year').textContent = new Date().getFullYear(); })();
+
+    // ============================
+    // Galeria: Enter abre em nova aba (acessibilidade)
+    // ============================
+    (function(){
+      document.querySelectorAll('.gallery figure').forEach(fig => {
+        fig.addEventListener('keydown', function(e){
+          if(e.key === 'Enter'){
+            const img = fig.querySelector('img');
+            if(img && img.src) window.open(img.src, '_blank');
+          }
+        });
+      });
+    })();
+
+    // ============================
+    // Pequena animação extra: efeito de parallax no hero image com mouse
+    // ============================
+    (function(){
+      const hero = document.querySelector('.hero-visual');
+      if(!hero) return;
+      const img = hero.querySelector('img');
+      hero.addEventListener('mousemove', function(e){
+        const rect = hero.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        img.style.transform = `translate(${x*12}px, ${y*8}px) scale(1.02)`;
+      });
+      hero.addEventListener('mouseleave', function(){
+        img.style.transform = 'translate(0,0) scale(1)';
+      });
+    })();
+
+
+  </script>
+
+   <!-- Modal da câmera (inicialmente escondido) -->
+  <div id="cameraModal" class="modal" aria-hidden="true" style="display:none;">
+    <div class="modal-content">
+      <button id="fecharModal" class="botao-fechar" title="Fechar">❌</button>
+      <h2 class="modal-title">Reconhecimento Facial</h2>
+      <div class="video-wrap">
+        <video id="video" autoplay muted playsinline></video>
+      </div>
+      <div class="controls">
+        <button id="tirarFoto" class="botao-foto" title="Tirar foto">📸</button>
+      </div>
+      <p id="modalStatus" class="modal-status">Aguardando...</p>
+      <canvas id="fotoCanvas" style="display:none;"></canvas>
+    </div>
+  </div>
+
+
+   <!-- Script principal -->
+  <script defer src="script.js"></script>
+
+</body>
+</html>
+
+
